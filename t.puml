@@ -9,5 +9,5 @@ Alice <-- Bob: another authentication Response
 
 
  @startuml
-  Bob -> Alice : hello
+ Bob -> Alice : hello
  @enduml
