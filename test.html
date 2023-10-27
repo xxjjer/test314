@@ -1,0 +1,441 @@
+<div id="configuration-up-cup-sd-ID1">
+    <div class="com-mb-lg-bottom">
+        <aui-security-mode
+            id="configuration-up-cup-sd-ID2"
+            #securityModeData
+            [tipname]="tipname"
+            [noSnmpTrap]="noSnmpTrap"
+        >
+        </aui-security-mode>
+    </div>
+
+    <div id="configuration-up-cup-sd-ID3" class="com-normal-point">
+        {{ 'upgradePlan_information' | translate }}
+    </div>
+    <div id="configuration-up-cup-sd-ID4">
+        <form id="configuration-up-cup-sd-ID5" aui-form [formGroup]="updatePlanForm" style="margin-top: 20px">
+            <ti-formfield
+                id="configuration-up-cup-sd-ID6"
+                [verticalAlign]="textForm.fieldVerticalAlign"
+                [labelWidth]="textForm.labelWidth"
+                [textLineHeight]="textForm.textForm.lineHeight"
+                [colsNumber]="textForm.cols1.number"
+                [colsGap]="textForm.cols1.gap"
+            >
+                <ti-item
+                    id="configuration-up-cup-sd-ID9"
+                    [label]="'upgradePlan_planName' | translate"
+                    [required]="true"
+                >
+                    <input
+                        id="configuration-up-cup-sd-ID10"
+                        type="text"
+                        maxlength="64"
+                        style="width: 410px"
+                        autocomplete="off"
+                        [(ngModel)]="updatePlanObject.Name.value"
+                        formControlName="updatePlanName"
+                        autofocus
+                        placeholder="{{ 'common_pleaseInput' | translate }}"
+                        [tiValidation]="updatePlanObject.Name.tiValidationTip"
+                        tiText
+                    />
+                </ti-item>
+                <ti-item id="configuration-up-cup-sd-ID15" [label]="'upgradePlan_planDescription' | translate">
+                    <textarea
+                        class="form-textarea-width410px-height"
+                        maxlength="256"
+                        id="textarea"
+                        [(ngModel)]="updatePlanObject.Description.value"
+                        formControlName="updatePlanDescription"
+                        placeholder="{{ 'common_pleaseInput' | translate }}"
+                        autocomplete="off"
+                        [tiValidation]="updatePlanObject.Description.tiValidationTip"
+                        tiTextarea
+                    >
+                    </textarea>
+                </ti-item>
+                <ti-item id="configuration-up-cup-sd-ID24" [label]="'upgradePlan_stratPlan' | translate">
+                    <ti-switch
+                        id="configuration-up-cup-sd-ID25"
+                        [(ngModel)]="updateSwitch"
+                        style="margin-top: 10px"
+                        [ngModelOptions]="{ standalone: true }"
+                    >
+                    </ti-switch>
+                    <span id="configuration-up-cup-sd-ID28" class="switch-text">
+                        {{ 'upgradePlan_startPlanTip' | translate }}
+                    </span>
+                </ti-item>
+            </ti-formfield>
+        </form>
+    </div>
+</div>
+<div id="configuration-up-cup-sd-ID33" class="com-border-bottom-dotted" style="margin-bottom: 10px"></div>
+<div id="configuration-up-cup-sd-ID34">
+    <div id="configuration-up-cup-sd-ID35" class="com-tablePage-nav clearfix">
+        <div id="configuration-up-cup-sd-ID36" class="com-normal-point com-opartnbar-leftcompnt">
+            {{ 'upgradePlan_targetDevice' | translate }}
+        </div>
+        <div style="width: 60px; float: left" *ngIf="selectDeviceTable.totalNumber > 0 && tree.length === 0">
+            <cus-table-colum
+                id="configuration-up-cup-sd-ID61"
+                [tableData]="selectDeviceTable"
+                columnID="add-device-custom"
+            >
+            </cus-table-colum>
+        </div>
+        <div id="configuration-up-cup-sd-ID39">
+            <div id="configuration-up-cup-sd-ID40" class="com-opartnbar-rightcompnt">
+                <button
+                    id="configuration-up-cup-sd-ID41"
+                    type="button"
+                    color="primary"
+                    (click)="selectDevice()"
+                    tiButton
+                    [disabled]="tree.length > 0"
+                >
+                    <i id="configuration-up-cup-sd-ID45" class="aui-icon icon-add"></i>
+                    {{ 'upgradePlan_selectDevice' | translate }}
+                </button>
+                <button
+                    id="configuration-up-cup-sd-ID44"
+                    type="button"
+                    color="primary"
+                    (click)="selectGroup()"
+                    tiButton
+                    [disabled]="selectDeviceTable.totalNumber > 0 || securityModeData.isOpenSwitch === 'true' || isCop"
+                >
+                    <i id="configuration-up-cup-sd-ID53" class="aui-icon icon-add"></i>
+                    {{ 'upgradePlan_selectDeviceGroup' | translate }}
+                </button>
+
+                <button
+                    id="configuration-up-cup-sd-ID51"
+                    tiButton
+                    type="button"
+                    (click)="clearDevice()"
+                    [disabled]="selectDeviceTable.totalNumber === 0 && tree.length === 0"
+                >
+                    {{ 'common_delete' | translate }}
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="configuration-up-cup-sd-ID59" class="upgrade-select-devices-box">
+        <!-- 选择设备 -->
+        <div id="configuration-up-cup-sd-ID60" *ngIf="selectDeviceTable.totalNumber > 0 && tree.length === 0">
+            <ti-table
+                id="configuration-up-cup-sd-ID62"
+                [(displayedData)]="selectDeviceTable.displayed"
+                [srcData]="selectDeviceTable.srcData"
+                [columns]="selectDeviceTable.columns"
+                [ngClass]="{ 'ti3-table-small': selectDeviceTable.isSmall }"
+                tiColsResizable
+            >
+                <div id="configuration-up-cup-sd-ID65" class="ti3-table-fixed-head">
+                    <table id="configuration-up-cup-sd-ID66">
+                        <thead id="configuration-up-cup-sd-ID67">
+                            <tr id="configuration-up-cup-sd-ID68">
+                                <!--使用展开详情图标时，需要给展开详情图标列加 details-icon-column 属性-->
+                                <th id="configuration-up-cup-sd-ID70" details-icon-column not-resizable></th>
+
+                                <th id="configuration-up-cup-sd-ID72" checkbox-column not-resizable>
+                                    <!--全选按钮-->
+                                    <!--如果有分页，全选需要控制当前页时，items接口传入displayed如果全选要控制表格所有数据，items接口传入srcData.data-->
+                                    <input
+                                        type="checkbox"
+                                        tiCheckgroup
+                                        [items]="selectDeviceTable.displayed"
+                                        [(checkeds)]="selectDeviceTable.checkedList"
+                                        (checkedsChange)="
+                                            selectDeviceTable.checkedsChange
+                                                ? selectDeviceTable.checkedsChange($event)
+                                                : null
+                                        "
+                                        [disabled]="
+                                            selectDeviceTable.totalNumber === 0 ||
+                                            (selectDeviceTable.checkedAllDisable !== undefined
+                                                ? selectDeviceTable.checkedAllDisable(selectDeviceTable.displayed)
+                                                : false)
+                                        "
+                                        id="checkedAllID_{{ tableID }}"
+                                    />
+                                    <label id="configuration-up-cup-sd-ID97" for="checkedAllID_{{ tableID }}"></label>
+                                </th>
+                                <ng-container
+                                    id="configuration-up-cup-sd-ID101"
+                                    *ngFor="let column of selectDeviceTable.columns"
+                                >
+                                    <th
+                                        id="configuration-up-cup-sd-ID106"
+                                        *ngIf="column.show !== false"
+                                        width="{{ column.width }}"
+                                    >
+                                        <ti-cell-text id="configuration-up-cup-sd-ID111">
+                                            {{ column.title }}
+                                        </ti-cell-text>
+                                        <ti-head-sort
+                                            id="configuration-up-cup-sd-ID114"
+                                            *ngIf="column.sortKey"
+                                            [sortKey]="column.sortKey"
+                                        >
+                                        </ti-head-sort>
+                                    </th>
+                                </ng-container>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div
+                    id="configuration-up-cup-sd-ID125"
+                    class="ti3-table-container ti3-resize-wrapper"
+                    style="max-height: 507px"
+                >
+                    <table id="configuration-up-cup-sd-ID129">
+                        <thead id="configuration-up-cup-sd-ID130">
+                            <tr id="configuration-up-cup-sd-ID131">
+                                <!--使用展开详情图标时，需要给展开详情图标列加 details-icon-column 属性-->
+                                <th id="configuration-up-cup-sd-ID133" details-icon-column not-resizable></th>
+                                <th id="configuration-up-cup-sd-ID134" checkbox-column not-resizable></th>
+                                <ng-container
+                                    id="configuration-up-cup-sd-ID135"
+                                    *ngFor="let column of selectDeviceTable.columns"
+                                >
+                                    <th
+                                        id="configuration-up-cup-sd-ID140"
+                                        tiOverflow
+                                        *ngIf="column.show !== false"
+                                        width="{{ column.width }}"
+                                    ></th>
+                                </ng-container>
+                            </tr>
+                        </thead>
+                        <tbody id="configuration-up-cup-sd-ID148">
+                            <!--注意:ngFor中的displayed数据与displayedData传入的数据一致, 初始化设置为[]即可-->
+                            <ng-container *ngFor="let row of selectDeviceTable.displayed; index as i">
+                                <tr>
+                                    <!--使用展开详情图标时，需要给展开详情图标列加 details-icon-column 属性-->
+                                    <td details-icon-column *ngIf="!!selectDeviceTable.detailInfo">
+                                        <ti-details-icon
+                                            [row]="row"
+                                            [index]="i"
+                                            (beforeToggle)="selectDeviceTable.detailInfo.beforeToggle($event)"
+                                        >
+                                        </ti-details-icon>
+                                        <!--详情图标设置，传入行数据-->
+                                    </td>
+                                    <!--使用复选框时，需要给复选框列加 checkbox-column 属性-->
+                                    <td checkbox-column *ngIf="!!selectDeviceTable.checkedList">
+                                        <input
+                                            type="checkbox"
+                                            tiCheckitem
+                                            [item]="row"
+                                            id="checkedListID_{{ tableID }}_{{ row.ID }}"
+                                            (checkedsChange)="
+                                                selectDeviceTable.checkedsChange
+                                                    ? selectDeviceTable.checkedsChange($event)
+                                                    : null
+                                            "
+                                            [disabled]="
+                                                selectDeviceTable.rowDisabled
+                                                    ? selectDeviceTable.rowDisabled(row)
+                                                    : false
+                                            "
+                                        />
+                                    </td>
+                                    <ng-container *ngFor="let column of selectDeviceTable.columns">
+                                        <td tiOverflow *ngIf="column.show !== false">
+                                            <span
+                                                *ngIf="column.iconClass"
+                                                class="status"
+                                                [ngClass]="column.iconClass(row)"
+                                            ></span>
+                                            <span *ngIf="column.type === 'redIconTip'">
+                                                <span style="line-height: 22px">
+                                                    {{
+                                                        column.getTextTip(getKeyValue(row, column.name)) !== ''
+                                                            ? column.rowText
+                                                            : getKeyValue(row, column.name)
+                                                    }}
+                                                </span>
+                                                <span
+                                                    *ngIf="column.getTextTip(getKeyValue(row, column.name)) !== ''"
+                                                    class="ti3-alert-type-icon ti3-icon ti3-icon-exclamation-circle ti3-alert-error-container"
+                                                    [tiTip]="column.getTextTip(getKeyValue(row, column.name))"
+                                                ></span>
+                                            </span>
+                                            <span
+                                                *ngIf="column.type !== 'redIconTip'"
+                                                [ngClass]="
+                                                    column.getStatusClass ? column.getStatusClass(row, column) : ''
+                                                "
+                                                (click)="column.clickEvent ? column.clickEvent(row) : null"
+                                            >
+                                                {{
+                                                    column.getStatusName
+                                                        ? column.getStatusName(row, i)
+                                                        : getKeyValue(row, column.name)
+                                                }}
+                                            </span>
+                                        </td>
+                                    </ng-container>
+                                </tr>
+                                <ng-container id="configuration-up-cup-sd-ID292">
+                                    <tr id="configuration-up-cup-sd-ID293" *tiDetailsTr="row">
+                                        <td
+                                            id="configuration-up-cup-sd-ID297"
+                                            [attr.colspan]="selectDeviceTable.columns.length + 2"
+                                            class="aui-table-drop-bar"
+                                        >
+                                            <div
+                                                id="configuration-up-cup-sd-ID304"
+                                                *ngIf="selectDeviceTable.detailType == 'custom'"
+                                            >
+                                                <aui-chisss-detail id="configuration-up-cup-sd-ID310" [row]="row">
+                                                </aui-chisss-detail>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </ng-container>
+                        </tbody>
+                        <tbody
+                            id="configuration-up-cup-sd-ID318"
+                            class="aui-noData-tbody"
+                            *ngIf="!selectDeviceTable.loading && selectDeviceTable.totalNumber === 0"
+                        >
+                            <tr id="configuration-up-cup-sd-ID325" class="ti3-table-nodata">
+                                <td
+                                    id="configuration-up-cup-sd-ID326"
+                                    [attr.colspan]="selectDeviceTable.columns.length + 2"
+                                >
+                                    {{ 'common_noData' | translate }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 在表格中使用分页组件时必须保证其父元素是ti-table -->
+                <ti-pagination
+                    id="configuration-up-cup-sd-ID339"
+                    class="aui-float-r"
+                    [(currentPage)]="selectDeviceTable.currentPage"
+                    [pageSize]="selectDeviceTable.pageSize"
+                    [(totalNumber)]="selectDeviceTable.totalNumber"
+                    [autoHide]="true"
+                >
+                </ti-pagination>
+                <div
+                    id="configuration-up-cup-sd-ID347"
+                    class="aui-float-r ti3-page-container"
+                    *ngIf="
+                        selectDeviceTable.totalNumber > 0 &&
+                        selectDeviceTable.totalNumber <= selectDeviceTable.pageSize.options[0]
+                    "
+                >
+                    {{ ('common_totalNumber' | translate) + selectDeviceTable.totalNumber }}
+                </div>
+            </ti-table>
+        </div>
+
+        <!-- 选择设备和选择组结果为空 -->
+        <div id="configuration-up-cup-sd-ID362" *ngIf="selectDeviceTable.totalNumber === 0 && tree.length === 0">
+            <ti-table id="configuration-up-cup-sd-ID363">
+                <div
+                    id="configuration-up-cup-sd-ID364"
+                    class="ti3-table-container ti3-resize-wrapper"
+                    style="border-bottom: none"
+                >
+                    <table id="configuration-up-cup-sd-ID368">
+                        <tbody id="configuration-up-cup-sd-ID369" style="border-bottom: none">
+                            <tr id="configuration-up-cup-sd-ID370" class="ti3-table-nodata">
+                                <td id="configuration-up-cup-sd-ID371">
+                                    {{ 'common_noData' | translate }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </ti-table>
+        </div>
+
+        <!-- 选择组 -->
+        <div id="configuration-up-cup-sd-ID380" *ngIf="selectDeviceTable.totalNumber === 0 && tree.length > 0">
+            <div id="configuration-up-cup-sd-ID381" [ngStyle]="{ height: deviceGroupTotal === 0 ? '500px' : '550px' }">
+                <div
+                    id="configuration-up-cup-sd-ID386"
+                    class="pull-left device-tree-left"
+                    [ngStyle]="{ height: deviceGroupTotal === 0 ? '500px' : '550px' }"
+                >
+                    <div id="configuration-up-cup-sd-ID392" class="device-tree">
+                        <ti-table id="configuration-up-cup-sd-ID393">
+                            <div id="configuration-up-cup-sd-ID394" class="ti3-table-container ti3-resize-wrapper">
+                                <table id="configuration-up-cup-sd-ID395">
+                                    <tbody
+                                        id="configuration-up-cup-sd-ID396"
+                                        style="border-bottom: none"
+                                        *ngIf="deviceGroupTotal > 0"
+                                    >
+                                        <tr id="configuration-up-cup-sd-ID400" style="background: #f4f6fa">
+                                            <td id="configuration-up-cup-sd-ID401">
+                                                <div id="configuration-up-cup-sd-ID402">
+                                                    <ti-tree
+                                                        id="configuration-up-cup-sd-ID403"
+                                                        [data]="tree"
+                                                        (change)="selectFn($event)"
+                                                        [changedByCheckbox]="true"
+                                                        [multiple]="true"
+                                                    >
+                                                    </ti-tree>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody
+                                        id="configuration-up-cup-sd-ID416"
+                                        *ngIf="deviceGroupTotal === 0"
+                                        style="border-bottom: none"
+                                    >
+                                        <tr
+                                            id="configuration-up-cup-sd-ID420"
+                                            class="ti3-table-nodata"
+                                            style="background: #f4f6fa"
+                                        >
+                                            <td id="configuration-up-cup-sd-ID424">
+                                                {{ 'common_noData' | translate }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </ti-table>
+                    </div>
+                    <ul
+                        id="configuration-up-cup-sd-ID435"
+                        style="margin-top: 50px; bottom: 30px"
+                        *ngIf="deviceGroupTotal > 0"
+                    >
+                        <li id="configuration-up-cup-sd-ID439" class="device-tree-number">
+                            <span id="configuration-up-cup-sd-ID440">{{ 'common_totalNumber' | translate }}</span>
+                            <span id="configuration-up-cup-sd-ID441">{{ deviceGroupTotal }}</span>
+                        </li>
+                    </ul>
+                </div>
+                <div
+                    id="configuration-up-cup-sd-ID445"
+                    class="pull-left"
+                    style="width: 73%; margin-left: 2%; overflow-y: auto"
+                    [ngStyle]="{ height: deviceGroupTotal === 0 ? '500px' : '550px' }"
+                >
+                    <cus-table id="configuration-up-cup-sd-ID452" [tableData]="selectGroupDeviceTable">
+                        <ng-template id="configuration-up-cup-sd-ID453" #customDetailName let-data="data">
+                            <aui-chisss-detail id="configuration-up-cup-sd-ID454" [row]="data"> </aui-chisss-detail>
+                        </ng-template>
+                    </cus-table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
