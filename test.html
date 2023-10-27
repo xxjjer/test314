@@ -213,7 +213,11 @@
                         </thead>
                         <tbody id="configuration-up-cup-sd-ID148">
                             <!--注意:ngFor中的displayed数据与displayedData传入的数据一致, 初始化设置为[]即可-->
-                            <ng-container *ngFor="let row of selectDeviceTable.displayed; index as i">
+                            <ng-container
+                                id="configuration-up-cup-sd-ID150"
+                                *ngFor="let row of selectDeviceTable.displayed; index as i"
+                            >
+                                <tr id="configuration-up-cup-sd-ID156">
                                 <tr>
                                     <!--使用展开详情图标时，需要给展开详情图标列加 details-icon-column 属性-->
                                     <td details-icon-column *ngIf="!!selectDeviceTable.detailInfo">
